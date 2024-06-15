@@ -1,0 +1,105 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+<button class="add_order"
+        onclick="return location.href = '/order/create'">
+    Добавить заказ +
+</button>
+
+<div style="overflow-y: scroll; height: 92vh;">
+<div class="task-container" style="margin: auto; margin-top: 20px">
+    <div class="splide" id="asd">
+        <div class="splide__track">
+            <ul class="splide__list">
+                <li class="splide__slide task-b">
+                    <div class="order-box"
+                         style="padding: 0px; border: none">
+                        <div style="height: 100px; background-color: #161719; display: flex; justify-content: center; align-items: center; border-radius: 10px; border: #a7acb1 2px solid">
+                            <h2 style="text-align: center; color: #a7acb1">Не назначен</h2>
+                        </div>
+                        <div style="padding: 5px">
+                            {% for order in not_assigned %}
+                            {% include "includes/order_card.html" %}
+                            {% empty %}
+                            <div style="height: 100px;display: flex; justify-content: center">
+                        <span style="color: #858484;
+                        font-weight: bold;
+                        height: 20px;
+                        margin-bottom: auto;
+                        margin-top: auto;
+                        font-size: 20px"
+                        >
+                            Здесь ничего нет
+                        </span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                </li>
+                <li class="splide__slide task-b">
+                    <div class="order-box"
+                         style="padding: 0px; border: none">
+                        <div style="height: 100px; background-color: #031633; display: flex; justify-content: center; align-items: center; border-radius: 10px; border: #084298 2px solid">
+                            <h2 style="text-align: center; color: #6ea8fe">В пути</h2>
+                        </div>
+                        <div style="padding: 5px">
+                            {% for order in assigned %}
+                            {% include "includes/order_card.html" %}
+                            {% empty %}
+                            <div style="height: 100px;display: flex; justify-content: center">
+                        <span style="color: #858484;
+                        font-weight: bold;
+                        height: 20px;
+                        margin-bottom: auto;
+                        margin-top: auto;
+                        font-size: 20px"
+                        >
+                            Здесь ничего нет
+                        </span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                </li>
+                <li class="splide__slide task-b">
+                    <div class="order-box"
+                         style="padding: 0px; border: none">
+                        <div style="height: 100px; background-color: #051b11; display: flex; justify-content: center; align-items: center; border-radius: 10px; border: #0f5132 2px solid">
+                            <h2 style="text-align: center; color: #75b798">Доставлен</h2>
+                        </div>
+                        <div style="padding: 5px">
+                            {% for order in done %}
+                            {% include "includes/order_card.html" %}
+                            {% empty %}
+                            <div style="height: 100px;display: flex; justify-content: center">
+                        <span style="color: #858484;
+                        font-weight: bold;
+                        height: 20px;
+                        margin-bottom: auto;
+                        margin-top: auto;
+                        font-size: 20px"
+                        >
+                            Здесь ничего нет
+                        </span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+</div>
+<script src="
+    https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js
+    "></script>
+<script src="
+    https://cdn.jsdelivr.net/npm/@splidejs/splide-extension-intersection@0.2.0/dist/js/splide-extension-intersection.min.js
+    "></script>
+<script>
+    var splide = new Splide('.splide', {
+        focus: 'center',
+        autoWidth: true,
+        omitEnd: true,
+        arrows: false,
+        pagination: false,
+    });
+    splide.mount();
+</script>
+{% endblock content %}

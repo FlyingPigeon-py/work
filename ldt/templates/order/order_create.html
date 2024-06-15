@@ -1,0 +1,74 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+<section class="pt-6 pb-7" id="features">
+    <div class="container" style="padding: 20px; display: flex; justify-content: center">
+        <div class="task-box" style="width: 100%; max-width: 1000px">
+            <button style="    position: relative;left: -20px;top: -20px;" type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"
+            onclick="history.go(-1);"
+            ></button>
+            {% if messages %}
+                <div class="alert alert-danger" role="alert">
+                    <ul class="messages">
+                        {% for message in messages %}
+                        <li
+                                {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            <h1>Создание заказа</h1>
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label for="name" class="form-label">Название</label>
+                    {{ form.name }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="client" class="form-label">Заказчик</label>
+                    {{ form.client }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="contact_number" class="form-label">Контактный номер</label>
+                    {{ form.contact_number }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="delivery_date" class="form-label">Дата доставки</label>
+                    <input type="datetime-local" name="delivery_date" id="delivery_date" class="form-control">
+                </div>
+
+                <div class="mb-3">
+                    <label for="address" class="form-label">Адрес</label>
+                    {{ form.address }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="payment_method" class="form-label">Способ оплаты</label>
+                    {{ form.payment_method }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="price" class="form-label">Цена</label>
+                    {{ form.price }}
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Описание</label>
+                    {{ form.description }}
+                </div>
+
+
+                <div style="padding: 10px">
+                    <button style="float: right" type="submit" class="simple-btn green-b n">Создать</button>
+                    <button type="button" style="float: right; margin-right: 5px" class="simple-btn dark-b n"
+                    onclick="history.go(-1)"
+                    >Назад</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock content %}

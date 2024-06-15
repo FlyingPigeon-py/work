@@ -1,0 +1,73 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+<div style="max-width: 100%; min-height: 70vh; display: flex; margin: 20px; justify-content: center">
+    <div class="login-box">
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <h1 style="margin: 0px 0px 20px 0px">Регистрация</h1>
+            {% if messages %}
+            <div class="alert alert-danger" role="alert">
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li
+                            {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            <div class="register">
+                <div style="margin: 20px; min-width: 250px;">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Адрес электронной почты</label>
+                        {{ form.email }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="last_name" class="form-label">Фамилия</label>
+                        {{ form.last_name }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="first_name" class="form-label">Имя</label>
+                        {{ form.first_name }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="middle_name" class="form-label">Отчество</label>
+                        {{ form.middle_name }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="birthday" class="form-label">Дата рождения</label>
+                        {{ form.birthday }}
+                    </div>
+                </div>
+
+                <div style="border-left: rgb(185,185,185) solid 1px; margin-right: 10px;margin-left: 10px;"></div>
+
+                <div style="margin: 20px; min-width: 250px; display: flex; flex-direction: column;">
+
+                    <div class="mb-3">
+                        <label for="avatar" class="form-label">Фото профиля</label>
+                        {{ form.avatar }}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="password1" class="form-label">Пароль</label>
+                        {{ form.password1 }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="password2" class="form-label">Подтверждение пороля</label>
+                        {{ form.password2 }}
+                        <div id="emailHelp" class="form-text">Пороль должен иметь длинну не менее 8 символов</div>
+                    </div>
+                    <div class="mb-3" style="margin-top: auto">
+                        <div style="display: flex; justify-content: space-between; padding: 10px">
+                            <a style="margin: auto" class="form-text" href="{% url "user:login" %}">У меня уже есть аккаунт</a>
+                        </div>
+                        <button style="float: right; width: 100%;" type="submit" class="simple-btn blue-f">
+                            Зарегистрироваться
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock content %}

@@ -1,0 +1,49 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+<section class="pt-6 pb-7" id="features">
+    <div class="container" style="padding: 20px; display: flex; justify-content: center">
+        <div class="profile-box" style="width: 100%; max-width: 1000px">
+                <button style="    position: relative;left: -20px;top: -20px;" type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"
+                onclick="history.go(-1);"
+                ></button>
+            <div style="margin: 0px 0px 20px 0px; text-align: center">
+                {% if userl.avatar %}
+                <div style="margin-right: 20px;">
+                    <img class="rounded-circle-avatar" style="width: 150px; height: 150px; padding: 0px" src="{{ userl.avatar.url }}">
+                </div>
+                {% endif %}
+
+                <h2 style="">{{ userl.get_name }}</h2>
+
+                {% if userl.is_superuser or userl.is_staff or userl.is_admin %}
+                    <span style="font-size: 12px" class="badge bg-warning-subtle border border-warning-subtle text-warning-emphasis rounded-pill">
+                        Администратор
+                    </span>
+                {% else %}
+                    <span style="font-size: 12px" class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill">
+                        Курьер
+                    </span>
+                {% endif %}
+            </div>
+
+            <div class="mb-3">
+                <label for="email" class="form-label">Адрес электронной почты</label>
+                <p name="email" class="form-control" required="" id="id_email">{{ userl.email }}</p>
+            </div>
+            <div class="mb-3">
+                <label for="last_name" class="form-label">Фамилия</label>
+                <p name="last_name" class="form-control" required="" id="id_last_name">{{userl.last_name}}</p>
+            </div>
+            <div class="mb-3">
+                <label for="first_name" class="form-label">Имя</label>
+                <p name="first_name" class="form-control" required="" id="id_first_name">{{userl.first_name}}</p>
+            </div>
+            <div class="mb-3">
+                <label for="middle_name" class="form-label">Отчество</label>
+                <p name="middle_name" class="form-control" id="id_middle_name">{{userl.middle_name}}</p>
+            </div>
+            <div class="mb-3">
+                <label for="birthday" class="form-label">Дата рождения</label>
+                <p name="birthday" class="form-control" id="id_birthday">{{userl.birthday}}</p>
+            </div>
+</section>
+{% endblock content %}

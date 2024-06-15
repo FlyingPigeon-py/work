@@ -1,0 +1,21 @@
+<div class="order" style="display: flex; flex-direction: row;"
+     onclick="return location.href = '/order/details/{{ order.id }}'"
+>
+    <div style="margin-right: 60px">
+        <div style="">
+            <div style="display: flex; width: 105%;">
+                <div>
+                    <span style="font-size: 13px">{{ order.creation_time }}</span>
+                    {% if order.delivery_date %}
+                    <span style="font-size: 11px">| </span>
+                    <span style="font-size: 11px">{{ order.delivery_date }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            <span style="margin-right: 5px; font-weight: bold; font-size: 20px">{{ order.name }}</span>
+        </div>
+        <div style="">
+            <span style="margin-right: 5px">{{ order.description }}</span>
+        </div>
+    </div>
+</div>

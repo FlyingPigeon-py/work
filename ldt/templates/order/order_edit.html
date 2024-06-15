@@ -1,0 +1,184 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+<section class="pt-6 pb-7" id="features">
+    <div class="container" style="padding: 20px; display: flex; justify-content: center">
+        <div class="task-box" style="width: 100%; max-width: 1000px">
+            <button style="    position: relative;left: -20px;top: -20px;" type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"
+            onclick="return location.href = '/order/list'"
+            ></button>
+            <h1>№{{ order.id }} {{ order.name }}</h1>
+            {% if messages %}
+                <div class="alert alert-danger" role="alert">
+                    <ul class="messages">
+                        {% for message in messages %}
+                        <li
+                                {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            {% if order.employee %}
+            <div class="task" role="alert"
+            onclick="return location.href = '/user/userdetail/{{ order.employee.id }}'"
+            >
+                <h3>
+                    Исполнитель
+                </h3>
+                <div style="display: flex;">
+
+                    <div style="margin-right: 20px;">
+                        <img class="rounded-circle-avatar" style="width: 50px; height: 50px; padding: 0px"
+                             src="{{ order.employee.avatar.url }}">
+                    </div>
+                    <div>
+                        {% if order.employee.is_superuser or order.employee.is_staff or order.employee.is_admin %}
+                            <span style="font-size: 12px" class="badge bg-warning-subtle border border-warning-subtle text-warning-emphasis rounded-pill">
+                                Администратор
+                            </span>
+                        {% else %}
+                            <span style="font-size: 12px" class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill">
+                                Курьер
+                            </span>
+                        {% endif %}<br>
+                        <span>{{order.employee.get_name}}</span>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label for="name" class="form-label">Название</label>
+                    {{ form.name }}
+                    {% if form.name.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.name.errors %}
+                        <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="employee" class="form-label">Исполнитель</label>
+                    {{ form.employee }}
+                    {% if form.employee.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.employee.errors %}
+                        <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="client" class="form-label">Заказчик</label>
+                    {{ form.client }}
+                    {% if form.client.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.client.errors %}
+                        <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="contact_number" class="form-label">Контактный номер</label>
+                    {{ form.contact_number }}
+                    {% if form.contact_number.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.contact_number.errors %}
+                        <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="address" class="form-label">Адрес</label>
+                    {{ form.address }}
+                    {% if form.address.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.address.errors %}
+                        <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="delivery_date" class="form-label">Дата доставки</label>
+                    <input type="datetime-local" name="delivery_date" value='{{form.delivery_date.value|date:"Y-m-d H:i"}}' id="delivery_date" class="form-control">
+                    {% if form.delivery_date.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.delivery_date.errors %}
+                        <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="payment_method" class="form-label">Способ оплаты</label>
+                    {{ form.payment_method }}
+                    {% if form.payment_method.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.payment_method.errors %}
+                        <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="price" class="form-label">Цена</label>
+                    {{ form.price }}
+                    {% if form.price.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.price.errors %}
+                        <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="mb-3">
+                    <label for="description" class="form-label">Описание</label>
+                    {{ form.description }}
+                    {% if form.description.errors %}
+                    <div class="alert alert-danger">
+                        {% for error in form.description.errors %}
+                        <div class="error">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div style="padding: 10px">
+                    <button style="float: right" type="submit" class="simple-btn">Изменить</button>
+
+
+
+                    {% if not order.status %}
+                        <button type="button" style="float: right; margin-right: 5px" class="simple-btn green-b n"
+                            onclick="return location.href = '/order/complete/{{ order.id }}'"
+                        >Выполнить заказ</button>
+                    {% else %}
+                        <button type="button" style="float: right; margin-right: 5px" class="simple-btn dark-b n"
+                            onclick="return location.href = '/order/cancel/{{ order.id }}'"
+                        >Отменить заказ</button>
+                    {% endif %}
+                    <button type="button" style="float: right; margin-right: 5px" class="simple-btn red-b n"
+                        onclick="return location.href = '/order/delete/{{ order.id }}'"
+                    >Удалить заказ</button>
+                    <button type="button" style="float: right; margin-right: 5px" class="simple-btn dark-b n"
+                    onclick="return location.href = '/order/list'"
+                    >Назад</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock content %}

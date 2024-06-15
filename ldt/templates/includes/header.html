@@ -1,0 +1,94 @@
+{% load static %}
+{% load i18n %}
+
+<header style="background-color: #000000">
+    <nav data-bs-theme="dark"
+         class="navbar navbar-expand-lg"
+         aria-label="Eleventh navbar example"
+         style="max-width: 1200px; margin: auto; background-color: #000000"
+    >
+        <div class="container-fluid">
+            <img src="https://cdn-icons-png.flaticon.com/512/4034/4034654.png" style="margin-right: 10px;" width="40" height="40"
+                 class="d-inline-block align-top" alt="">
+            <a class="navbar-brand text-light" href="{% url "homepage:homepage" %}">LDT</a>
+            <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarsExample09"
+                    aria-controls="navbarsExample09"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarsExample09">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a
+                                class="nav-link {% if request.resolver_match.view_name == 'homepage:homepage' %}active{% endif %}"
+                                aria-current="page"
+                                href="/"
+                                {% if request.path == '/' %}onclick="return false;"{% endif %}
+                        >Главная</a
+                        >
+                    </li>
+                    {% if request.user.is_authenticated %}
+                       <li class="nav-item ">
+                            <a class="nav-link {% if request.resolver_match.view_name == 'users:profile' %}active{% endif %}"
+                               href="{% url "users:profile" %}"
+                               {% if request.path == '/user/profile' %}onclick="return false;"{% endif %}
+                               >Профиль</a>
+                       </li>
+                        {% if not request.user.is_staff and not request.user.is_admin and not request.user.is_superuser %}
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.resolver_match.view_name == 'order:orders_my' %}active{% endif %}"
+                                   href="{% url "order:orders_my" %}"
+                                   {% if request.path == '/order/my' %}onclick="return false;"{% endif %}
+                                   >Мои заказы</a>
+                            </li>
+                        {% endif %}
+                        {% if request.user.is_staff or request.user.is_admin or request.user.is_superuser %}
+                            <li class="nav-item ">
+                                <a class="nav-link {% if request.resolver_match.view_name == 'order:orders_list' %}active{% endif %}"
+                                   href="{% url "order:orders_list" %}"
+                                   {% if request.path == '/order/list' %}onclick="return false;"{% endif %}
+                                   >Заказы</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.resolver_match.view_name == 'users:userslist' %}active{% endif %}"
+                                   href="{% url "users:userslist" %}"
+                                   {% if request.path == '/users/my' %}onclick="return false;"{% endif %}
+                                   >Сотрудники</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {% if request.resolver_match.view_name == 'order:orders_export' %}active{% endif %}"
+                                   href="{% url "order:orders_export" %}"
+                                   {% if request.path == '/order/export' %}onclick="return false;"{% endif %}
+                                   >Отчёт</a>
+                            </li>
+                            {% if request.user.is_admin or request.user.is_superuser %}
+                                <li class="nav-item">
+                                    <a class="nav-link {% if request.resolver_match.view_name == '' %}active{% endif %}"
+                                       href="/admin/"
+                                       {% if request.path == '/admin/' %}onclick="return false;"{% endif %}
+                                       >Панель администратора</a>
+                                </li>
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+        {% if not request.user.is_authenticated %}
+            <div class="login-btns">
+                <div class="text-end">
+                    <a href="{% url "users:register" %}" type="button" class="btn btn-outline-primary me-2 simple-btn blue-b">Регистрация</a>
+                </div>
+                <div class="text-end">
+                    <a href="{% url "users:login" %}" type="button" class="btn btn-primary simple-btn blue-f">Вход</a>
+                </div>
+            </div>
+        {% endif %}
+    </nav>
+</header>

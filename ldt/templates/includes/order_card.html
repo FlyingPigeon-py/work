@@ -1,0 +1,30 @@
+<div class="order" style="display: flex; flex-direction: row;"
+     onclick="return location.href = '/order/edit/{{ order.id }}'"
+>
+    <div style="margin-right: 60px;">
+        <div>
+            <div style="display: flex; width: 105%;">
+                <div style="margin-right: 5px">
+                    {% if order.status %}
+                        <div style="border-radius: 50%; width: 10px; height: 10px; background-color: rgba(1,101,57,0.55);position: relative;top: 8px;"></div>
+                    {% elif not order.status and order.employee%}
+                        <div style="border-radius: 50%; width: 10px; height: 10px; background-color: rgba(0,81,108,0.67);position: relative;top: 8px;"></div>
+                    {% else %}
+                        <div style="border-radius: 50%; width: 10px; height: 10px; background-color: #2f2f2f;position: relative;top: 8px;"></div>
+                    {% endif %}
+                </div>
+                <div>
+                    <span style="font-size: 13px">{{ order.creation_time }}</span>
+                    {% if order.delivery_date %}
+                    <span style="font-size: 11px">| </span>
+                    <span style="font-size: 11px">{{ order.delivery_date }}</span>
+                    {% endif %}
+                </div>
+            </div>
+            <span style="margin-right: 5px; font-weight: bold; font-size: 20px">{{ order.name }}</span>
+        </div>
+        <div>
+            <span style="margin-right: 5px">{{ order.description }}</span>
+        </div>
+    </div>
+</div>

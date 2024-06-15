@@ -1,0 +1,43 @@
+{% extends 'base.html' %} {% load static %} {% block content %}
+  <section class="pt-6 pb-7" id="features">
+    <div class="container" style="padding: 20px; display: flex; justify-content: center">
+      <div class="task-box" style="width: 100%; max-width: 1000px">
+        <h1>Сотрудники</h1>
+        <form class="w-100 me-3" style="margin-bottom: 10px" onsubmit="location.href = '/' + document.getElementById('search').value; return false;">
+          <input id="search" type="search" class="form-control" placeholder="Поиск по электронной почте" aria-label="Search" />
+        </form>
+        <div class="task-cont" style="max-height: 550px">
+          {% for userl in user_list %}
+            <div class="task" style="display: flex; flex-direction: row" onclick="return location.href = '/user/userdetail/{{ userl.id }}'">
+              <div style="margin-right: 10px">
+                {% if userl.avatar %}
+                  <div style="margin-right: 20px;">
+                    <img class="rounded-circle-avatar" style="width: 50px; height: 50px; padding: 0px" src="{{ userl.avatar.url }}" />
+                  </div>
+                {% else %}
+                  <div style="margin-right: 30px;">
+                    <ion-icon name="person" style="font-size: 40px; position: relative; top: 3px"></ion-icon>
+                  </div>
+                {% endif %}
+              </div>
+              <div style="margin-right: 60px">
+                <div style="color: #727272">
+                  <span style="margin-right: 5px">{{ userl.get_name }}</span>
+
+                  {% if userl.is_superuser or userl.is_staff or userl.is_admin %}
+                    <span style="font-size: 12px" class="badge bg-warning-subtle border border-warning-subtle text-warning-emphasis rounded-pill">Администратор</span>
+                  {% else %}
+                    <span style="font-size: 12px" class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill">Курьер</span>
+                  {% endif %}
+                </div>
+                <div>{{ userl }}</div>
+              </div>
+            </div>
+            {% empty %}
+            <h1 style="color: #ababab; text-align: center">Ничего не найдено</h1>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

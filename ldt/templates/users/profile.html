@@ -1,0 +1,290 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+{% load tz %}
+<section class="pt-6 pb-7" id="features">
+    <div class="container" style="padding: 20px">
+        <div class="row" style="justify-content: center">
+            <div class="profile-box" style="margin: 5px">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div style="margin: 0px 0px 20px 0px; display: flex">
+                        <div style="margin-right: 20px">
+                            <div class="avatar" id="avatar">
+                                <div id="preview"><img src="{% if user.avatar %}{{ user.avatar.url }}{% else %}{% static "img/avatar.png" %}{% endif %}"
+                                                       id="avatar-image" class="avatar_img" id="">
+                                </div>
+                                <div class="avatar_upload">
+                                    <label class="upload_label">Upload
+                                        <input type="file" name="avatar" accept="image/*" id="upload">
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                    <div style="    padding-top: 20px;">
+                        {% if user.is_superuser or user.is_staff or user.is_admin %}
+                        <span style="font-size: 12px"
+                              class="badge bg-warning-subtle border border-warning-subtle text-warning-emphasis rounded-pill">
+                                    Администратор
+                                </span>
+                        {% else %}
+                        <span style="font-size: 12px"
+                              class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill">
+                                    Курьер
+                                </span>
+                        {% endif %}
+                        <h2 class="username-field">{{ user.get_name }}</h2>
+                    </div>
+            </div>
+
+            {% if messages %}
+            <div class="alert alert-danger" role="alert">
+                <ul class="messages">
+                    {% for message in messages %}
+                    <li
+                            {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+
+            {% endif %}
+            <div class="mb-3">
+                <label for="email" class="form-label">Адрес электронной почты</label>
+                {{ form.email }}
+                {% if form.email.errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.email.errors %}
+                    <div class="error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                <label for="last_name" class="form-label">Фамилия</label>
+                {{ form.last_name }}
+                {% if form.last_name.errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.last_name.errors %}
+                    <div class="error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                <label for="first_name" class="form-label">Имя</label>
+                {{ form.first_name }}
+                {% if form.first_name.errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.first_name.errors %}
+                    <div class="error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                <label for="middle_name" class="form-label">Отчество</label>
+                {{ form.middle_name }}
+                {% if form.middle_name.errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.middle_name.errors %}
+                    <div class="error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                <label for="birthday" class="form-label">Дата рождения</label>
+                {{ form.birthday }}
+                {% if form.birthday.errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.birthday.errors %}
+                    <div class="error">{{ error }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            <div style="display: flex; justify-content: space-between; padding: 1px">
+
+                <button style="float: right; width: 100%" type="submit" class="simple-btn">Изменить
+                </button>
+            </div>
+            </form>
+            <form style="margin-top: 10px" method="post" action="{% url "user:logout" %}">
+            {% csrf_token %}
+            <button type="submit" style="float: right; width: 100%" class="simple-btn red-b n">Выход</button>
+            </form>
+        </div>
+
+        <div class="task-box" style="margin: 5px">
+            <h2 style="margin: 0px 0px 20px 0px">Информация</h2>
+
+            <div style="display: block" class="task" role="alert">
+                <h3>Открытие смены</h3>
+                Склад: Название склад <br>
+                Смена: Название смены <br>
+                Смена открыта в <b>{{ time|date:"H:i"}}</b> <br>
+            </div>
+
+
+            {% if request.user.is_staff or request.user.is_admin or request.user.is_superuser %}
+                <div style="display: block" class="task" role="alert"
+                onclick="return location.href = '/order/list'"
+                >
+                    <h3>Заказы</h3>
+                    <b>Всего: {{ order_count }} <br></b>
+                     Не назначено:<span> <b>{{ order_not_assigned_count }}</b> </span><br>
+                     В процессе:<span> <b>{{ order_in_progress_count }}</b> </span><br>
+                     Выполнено: <span><b>{{ order_done_count }}</b> </span> <br>
+                </div>
+            {% elif not request.user.is_staff and not request.user.is_admin and not request.user.is_superuser%}
+                <div style="display: block" class="task" role="alert"
+                onclick="return location.href = '/order/my'"
+                >
+                    <h3>Заказы</h3>
+                    <b>Всего: {{ order_count }} <br></b>
+                     В процессе:<span> <b>{{ order_in_progress_count }}</b> </span><br>
+                    Выполнено: <span><b>{{ order_done_count }}</b> </span> <br>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+
+    </div>
+</section>
+<script>
+    var upload = document.getElementById("upload");
+    var preview = document.getElementById("preview");
+    var avatar = document.getElementById("avatar");
+    var avatar_name = document.getElementById("name");
+    var avatar_name_change_box =
+        document.getElementById("change-name-box");
+
+    var avatars = {
+        srcList: [
+        ],
+        activeKey: 1,
+        add: function (_name, _src) {
+            this.activeKey = this.srcList.length;
+            return (this.srcList.push({name: _name, src: encodeURIComponent(_src)}) - 1);
+        },
+        changeName: function (key, _name) {
+
+            if (!Number.isInteger(key)) {
+                return false;
+            }
+            this.srcList[key].name = _name;
+            if (avatar_name.dataset.key == key) {
+                avatar_name.textContent = _name;
+            }
+            return _name;
+        },
+        showNext: function () {
+
+            var _next = this.activeKey + 1;
+            if (_next >= this.srcList.length) {
+                _next = 0;
+            }
+            this.showByKey(_next);
+
+        },
+        showLast: function () {
+            var _next = this.activeKey - 1;
+            if (_next < 0) {
+                _next = this.srcList.length - 1;
+            }
+            this.showByKey(_next);
+        },
+        showByKey: function (_next) {
+            var _on = this.srcList[_next];
+            if (!_on.name) return;
+
+            while (preview.firstChild) {
+                preview.removeChild(preview.firstChild);
+            }
+
+            var img = document.createElement("img");
+            img.src = decodeURIComponent(_on.src);
+            img.className = "avatar_img--loading";
+            img.onload = function () {
+                img.classList.add("avatar_img");
+            }
+            avatar_name.textContent = _on.name;
+            avatar_name.setAttribute("data-key", _next);
+            preview.appendChild(img);
+            this.activeKey = _next;
+        }
+    };
+
+    function showAvatar(key) {
+        if (!key) {
+            key = avatars.activeKey;
+        }
+
+    }
+    upload.addEventListener("change", handleFiles, false);
+
+    function handleFiles() {
+        var files = this.files;
+        for (var i = 0; i < files.length; i++) {
+            var file = files[i];
+            var imageType = /^image\//;
+
+            if (!imageType.test(file.type)) {
+                avatar.classList.add("avatar--upload-error");
+                setTimeout(function () {
+                    avatar.classList.remove("avatar--upload-error");
+                }, 1200);
+                continue;
+            }
+
+            avatar.classList.remove("avatar--upload-error");
+
+            while (preview.firstChild) {
+                preview.removeChild(preview.firstChild);
+            }
+
+            var img = document.createElement("img");
+            img.file = file;
+            img.src = window.URL.createObjectURL(file);
+            img.onload = function () {
+            }
+            img.className = "avatar_img";
+
+            document.activeElement.blur();
+            window.getSelection().removeAllRanges();
+
+            var _avatarKey = avatars.add(file.name, img.src);
+            var avatarNameElement = document.getElementById("avatar_name");
+            if (avatarNameElement) {
+                avatarNameElement.textContent = file.name;
+                avatarNameElement.setAttribute("data-key", _avatarKey);
+            }
+            preview.appendChild(img);
+        }
+    }
+    window.changeAvatarName = function (event, key, name) {
+        if (event.keyCode != 13 && event != 'blur') return;
+        key = parseInt(key);
+        if (!name) return;
+        var change = avatars.changeName(key, name);
+        document.activeElement.blur();
+        window.getSelection().removeAllRanges();
+
+    };
+
+    window.changeAvatar = function (dir) {
+        if (dir === 'next') {
+            avatars.showNext();
+        } else {
+            avatars.showLast();
+        }
+    };
+    window.handleAriaUpload = function (e, obj) {
+        if (e.keyCode == 13) {
+            obj.click();
+        }
+    };
+
+</script>
+{% endblock content %}

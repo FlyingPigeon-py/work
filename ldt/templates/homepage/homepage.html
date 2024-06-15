@@ -1,0 +1,50 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+<header class="bg-dark py-5" style="    background-color: rgb(0 0 0) !important;">
+    <div class="container px-7">
+        <div class="row gx-7 justify-content-center">
+            <div class="col-lg-7">
+                <div class="text-center my-5">
+                    <h1 class="display-6 fw-bolder text-white mb-2">LDT — это не просто доставка, это люди, работающие в ней!</h1>
+                    <p class="lead text-white-50 mb-4">Команда LDT состоит из опытных специалистов в области логистики и
+                        технологий. Мы понимаем уникальные потребности курьерских служб и администраторов склада, и мы
+                        стремимся предоставлять решения, которые помогают им добиваться успеха.</p>
+                    <div>
+                        <a style="margin-right: 10px; font-size: 20px;" class="btn btn-primary me-2 simple-btn blue-f" href="{% url "users:profile" %}">Начать</a>
+                        {% if request.user.is_staff or request.user.is_admin or request.user.is_superuser %}
+                        <a style="margin-right: 10px; font-size: 20px;" class="btn btn-primary me-2 simple-btn dark-b dark-o" href="{% url "order:orders_list" %}">Задачи</a>
+                        {% elif not request.user.is_staff and not request.user.is_admin and not request.user.is_superuser%}
+                        <a  style="margin-right: 10px; font-size: 20px;" class="btn btn-primary me-2 simple-btn dark-b dark-o" href="{% url "order:orders_my"%}">Мои задачи</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+<section class="py-2 border-bottom" id=" ">
+    <div class="container px-2 my-5">
+        <div class="row gx-5">
+            <div class="col-lg-4 mb-5 mb-lg-0">
+                <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-collection"></i>
+                </div>
+                <h2 class="h4 fw-bolder">Управление заказами</h2>
+                <p>Приложение позволяет компании доставки принимать и записывать заказы через удобный интерфейс. Администраторы могут легко отслеживать все заказы, что обеспечивает эффективное управление процессом доставки.</p>
+            </div>
+
+            <div class="col-lg-4 mb-5 mb-lg-0">
+                <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-collection"></i>
+                </div>
+                <h2 class="h4 fw-bolder">Оптимизация</h2>
+                <p>Приложение позволяет оптимизировать процесс доставки, разделяя заказы между курьерами с учетом их загруженности. Это позволяет компании экономить время и ресурсы, повышая производительность доставки.</p>
+            </div>
+
+            <div class="col-lg-4 mb-5 mb-lg-0">
+                <div class="feature bg-primary bg-gradient text-white rounded-3 mb-3"><i class="bi bi-collection"></i>
+                </div>
+                <h2 class="h4 fw-bolder">Отчетность и аналитика</h2>
+                <p>Приложение предоставляет возможность просматривать отчеты по выполненным заказам. Это помогает компании делать информированные решения для оптимизации процессов и повышения качества обслуживания клиентов.</p>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}

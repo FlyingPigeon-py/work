@@ -1,0 +1,103 @@
+{% extends "base.html" %} {% load static %} {% block content %}
+<section class="pt-6 pb-7" id="features">
+    <div class="container" style="padding: 20px; display: flex; justify-content: center">
+        <div class="task-box" style="width: 100%; max-width: 1000px">
+            <button style="    position: relative;left: -20px;top: -20px;" type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"
+            onclick="history.go(-1);"
+            ></button>
+            <h1>№{{ order.id }} {{ order.name }}</h1>
+            <br>
+
+            <div class="task" role="alert"
+                onclick="return location.href = '/user/userdetail/{{ order.employee.id }}'"
+            >
+                <h3>
+                    Исполнитель
+                </h3>
+                <div style="display: flex;">
+
+                    <div style="margin-right: 20px;">
+                        <img class="rounded-circle-avatar" style="width: 50px; height: 50px; padding: 0px"
+                             src="{{ order.employee.avatar.url }}">
+                    </div>
+                    <div>
+                        {% if order.employee.is_superuser or order.employee.is_staff or order.employee.is_admin %}
+                            <span style="font-size: 12px" class="badge bg-warning-subtle border border-warning-subtle text-warning-emphasis rounded-pill">
+                                Администратор
+                            </span>
+                        {% else %}
+                            <span style="font-size: 12px" class="badge bg-success-subtle border border-success-subtle text-success-emphasis rounded-pill">
+                                Курьер
+                            </span>
+                        {% endif %}<br>
+                        <span>{{order.employee.get_name}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <table style="width: 100%">
+                <tr>
+                    <td>Статус:</td>
+                    <td>
+                        {% if order.status %}
+                        <span class="status_pass">Завершено</span>
+                        {% else %}
+                        <span class="status_process">В процессе</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Заказчик:</td>
+                    <td>{{ order.client }}</td>
+                </tr>
+                <tr>
+                    <td>Контактный номер:</td>
+                    <td>{{ order.contact_number }}</td>
+                </tr>
+                <tr>
+                    <td>Адрес:</td>
+                    <td>{{ order.address }}</td>
+                </tr>
+                <tr>
+                    <td>Дата:</td>
+                    <td>{{ order.creation_time }}</td>
+                </tr>
+                <tr>
+                    <td>Способ оплаты:</td>
+                    <td>{{ order.get_payment_method_display }}</td>
+                </tr>
+                <tr>
+                    <td>Цена:</td>
+                    <td>{{ order.price }} руб.</td>
+                </tr>
+            </table>
+            <br>
+            <p>{{ order.description }}</p>
+            <div style="display: flex; justify-content: end">
+                {% if not order.status %}
+                <form method="get" action="/order/complete/{{ order.id }}">
+                    {% csrf_token %}
+                    <button type="button" style="margin-right: 2px" class="simple-btn dark-b n"
+                    onclick="history.go(-1)"
+                    >Назад</button>
+                    <button type="submit" class="simple-btn green-b n"
+                    >Заказ выполнен
+                    </button>
+                </form>
+                {% else %}
+                <form method="get" action="/order/cancel/{{ order.id }}">
+                    {% csrf_token %}
+                    <button type="button" style="margin-right: 2px" class="simple-btn dark-b n"
+                    onclick="history.go(-1)"
+                    >Назад</button>
+                    <button class="simple-btn red-b n"
+                            type="submit"
+                    >Отменить заказ
+                    </button>
+                </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock content %}
